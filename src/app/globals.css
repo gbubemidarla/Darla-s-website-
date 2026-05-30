@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-pink: #FF4FA3;
+  --brand-plum: #7A1E5D;
+  --brand-peach: #FF9E6D;
+  --brand-gold: #FFD166;
+  --brand-cream: #FFF8F5;
+  --brand-charcoal: #2D2D2D;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-brand-cream text-brand-charcoal;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .dark body {
+    @apply bg-brand-plum text-white;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply backdrop-blur-md bg-white/20 border border-white/30;
+  }
+
+  .glass-dark {
+    @apply backdrop-blur-md bg-black/20 border border-white/10;
+  }
+
+  .btn-primary {
+    @apply bg-brand-pink text-white font-semibold px-6 py-3 rounded-2xl
+           hover:bg-brand-plum transition-all duration-300 shadow-lg
+           hover:shadow-brand-pink/30 hover:scale-105 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply border-2 border-brand-pink text-brand-pink font-semibold px-6 py-3
+           rounded-2xl hover:bg-brand-pink hover:text-white transition-all
+           duration-300;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+
+  .section-heading {
+    @apply text-3xl md:text-4xl font-bold text-brand-plum dark:text-white;
+  }
+
+  .section-sub {
+    @apply text-brand-charcoal/70 dark:text-white/70 text-lg;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-hero-gradient;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
