@@ -6,13 +6,16 @@ import {
   Lock, LogOut, ShoppingBag, CheckCircle, ChefHat, Bike, XCircle,
   MessageCircle, RefreshCw, Users, DollarSign, Eye,
   ChevronDown, ChevronUp, Pencil, Trash2, Plus, Save,
-  RotateCcw, UtensilsCrossed, X,
+  RotateCcw, UtensilsCrossed, X, Star, ThumbsUp, ThumbsDown,
 } from "lucide-react";
 import {
   getOrders, updateOrderStatus, updateOrderDeliveryFee,
   buildWhatsAppMessage, WHATSAPP_NUMBERS, type Order,
 } from "@/lib/orders";
 import { getLiveMenu, saveLiveMenu, resetMenu } from "@/lib/menu";
+import {
+  getReviews, approveReview, rejectReview, deleteReview, type Review,
+} from "@/lib/reviews";
 import { categories, type Product } from "@/data/products";
 
 const ADMIN_PASSWORD = "darlastaff2026";
@@ -453,12 +456,131 @@ function MenuTab() {
   );
 }
 
+// ─── Reviews Tab ─────────────────────────────────────────────────────────────
+function ReviewsTab() {
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [filter, setFilter] = useState<"pending" | "approved" | "rejected" | "all">("pending");
+
+  const load = useCallback(() => setReviews(getReviews()), []);
+  useEffect(() => { load(); }, [load]);
+
+  const handleApprove = (id: string) => { approveReview(id); load(); };
+  const handleReject  = (id: string) => { rejectReview(id);  load(); };
+  const handleDelete  = (id: string) => { deleteReview(id);  load(); };
+
+  const pending  = reviews.filter((r) => r.status === "pending");
+  const approved = reviews.filter((r) => r.status === "approved");
+  const rejected = reviews.filter((r) => r.status === "rejected");
+
+  const displayed = filter === "all" ? reviews
+    : filter === "pending"  ? pending
+    : filter === "approved" ? approved
+    : rejected;
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+        <p className="text-brand-charcoal/60 dark:text-white/60 text-sm">
+          {pending.length} pending · {approved.length} approved · {rejected.length} rejected
+        </p>
+        <button onClick={load} className="flex items-center gap-1.5 bg-brand-pink/10 hover:bg-brand-pink/20 text-brand-pink font-semibold px-4 py-2 rounded-xl text-sm transition-colors">
+          <RefreshCw size={14} /> Refresh
+        </button>
+      </div>
+
+      {/* Filter tabs */}
+      <div className="flex gap-2 overflow-x-auto scrollbar-hide mb-6 pb-1">
+        {(["pending", "approved", "rejected", "all"] as const).map((f) => {
+          const count = f === "all" ? reviews.length : f === "pending" ? pending.length : f === "approved" ? approved.length : rejected.length;
+          return (
+            <button key={f} onClick={() => setFilter(f)}
+              className={`whitespace-nowrap px-4 py-2 rounded-xl text-sm font-semibold transition-all shrink-0 capitalize ${
+                filter === f ? "bg-brand-pink text-white shadow-md" : "bg-white dark:bg-brand-plum/30 text-brand-charcoal dark:text-white border border-brand-pink/20 hover:border-brand-pink"
+              }`}>
+              {f} ({count})
+            </button>
+          );
+        })}
+      </div>
+
+      {displayed.length === 0 ? (
+        <div className="text-center py-16">
+          <Star size={40} className="text-brand-pink/30 mx-auto mb-3" />
+          <p className="font-bold text-brand-plum dark:text-white mb-1">No reviews here yet</p>
+          <p className="text-brand-charcoal/50 dark:text-white/50 text-sm">Customer reviews will appear here after they submit them on the website.</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {displayed.map((r) => (
+            <motion.div key={r.id} layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+              className="bg-white dark:bg-brand-plum/30 rounded-2xl border border-brand-pink/10 p-5">
+              <div className="flex items-start justify-between gap-4 flex-wrap">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3 flex-wrap mb-2">
+                    <div className="w-9 h-9 rounded-full bg-brand-pink/10 flex items-center justify-center font-bold text-brand-pink text-sm shrink-0">
+                      {r.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="font-bold text-brand-plum dark:text-white text-sm">{r.name}</p>
+                      <p className="text-brand-charcoal/40 dark:text-white/40 text-xs">
+                        {new Date(r.createdAt).toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" })}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-0.5">
+                      {[1,2,3,4,5].map((n) => (
+                        <Star key={n} size={13} className={n <= r.rating ? "fill-brand-gold text-brand-gold" : "text-gray-200"} />
+                      ))}
+                    </div>
+                    <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
+                      r.status === "pending"  ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300" :
+                      r.status === "approved" ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300" :
+                      "bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400"
+                    }`}>
+                      {r.status}
+                    </span>
+                  </div>
+                  <p className="text-brand-charcoal/70 dark:text-white/70 text-sm leading-relaxed italic">&ldquo;{r.text}&rdquo;</p>
+                </div>
+
+                <div className="flex gap-2 shrink-0">
+                  {r.status !== "approved" && (
+                    <button onClick={() => handleApprove(r.id)}
+                      className="flex items-center gap-1.5 bg-green-500 hover:bg-green-600 text-white text-xs font-semibold px-3 py-2 rounded-xl transition-colors">
+                      <ThumbsUp size={13} /> Approve
+                    </button>
+                  )}
+                  {r.status !== "rejected" && r.status !== "approved" && (
+                    <button onClick={() => handleReject(r.id)}
+                      className="flex items-center gap-1.5 bg-red-100 hover:bg-red-200 dark:bg-red-900/20 text-red-600 text-xs font-semibold px-3 py-2 rounded-xl transition-colors">
+                      <ThumbsDown size={13} /> Reject
+                    </button>
+                  )}
+                  {r.status === "approved" && (
+                    <button onClick={() => handleReject(r.id)}
+                      className="flex items-center gap-1.5 bg-red-100 hover:bg-red-200 dark:bg-red-900/20 text-red-600 text-xs font-semibold px-3 py-2 rounded-xl transition-colors">
+                      <ThumbsDown size={13} /> Remove
+                    </button>
+                  )}
+                  <button onClick={() => handleDelete(r.id)}
+                    className="p-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 text-brand-charcoal/40 hover:text-red-500 transition-colors">
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Main Admin Page ──────────────────────────────────────────────────────────
 export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
   const [password, setPassword] = useState("");
   const [pwError, setPwError] = useState("");
-  const [tab, setTab] = useState<"orders" | "menu">("orders");
+  const [tab, setTab] = useState<"orders" | "menu" | "reviews">("orders");
   const [orders, setOrders] = useState<Order[]>([]);
   const [filterStatus, setFilterStatus] = useState<"all" | Order["status"]>("all");
 
@@ -529,7 +651,7 @@ export default function AdminPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-8 bg-white dark:bg-brand-plum/20 p-1.5 rounded-2xl w-fit border border-brand-pink/10">
+      <div className="flex gap-2 mb-8 bg-white dark:bg-brand-plum/20 p-1.5 rounded-2xl w-fit border border-brand-pink/10 flex-wrap">
         <button onClick={() => setTab("orders")}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all ${tab === "orders" ? "bg-brand-pink text-white shadow-md" : "text-brand-charcoal dark:text-white hover:text-brand-pink"}`}>
           <ShoppingBag size={16} /> Orders {newOrders.length > 0 && <span className="bg-white/30 text-white text-xs px-1.5 py-0.5 rounded-full">{newOrders.length}</span>}
@@ -537,6 +659,10 @@ export default function AdminPage() {
         <button onClick={() => setTab("menu")}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all ${tab === "menu" ? "bg-brand-pink text-white shadow-md" : "text-brand-charcoal dark:text-white hover:text-brand-pink"}`}>
           <UtensilsCrossed size={16} /> Menu Editor
+        </button>
+        <button onClick={() => setTab("reviews")}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all ${tab === "reviews" ? "bg-brand-pink text-white shadow-md" : "text-brand-charcoal dark:text-white hover:text-brand-pink"}`}>
+          <Star size={16} /> Reviews
         </button>
       </div>
 
@@ -581,6 +707,9 @@ export default function AdminPage() {
 
       {/* Menu Tab */}
       {tab === "menu" && <MenuTab />}
+
+      {/* Reviews Tab */}
+      {tab === "reviews" && <ReviewsTab />}
     </div>
   );
 }
