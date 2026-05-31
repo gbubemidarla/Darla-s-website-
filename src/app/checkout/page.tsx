@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/data/products";
+import { saveOrder, type Order } from "@/lib/orders";
 
 const DELIVERY_FEE = 800;
 
@@ -34,6 +35,10 @@ const paymentOptions: {
   { id: "ussd", label: "USSD", desc: "*737#, *966#, *777# & more", icon: Smartphone },
   { id: "pod", label: "Pay on Delivery", desc: "Pay when your order arrives", icon: Banknote },
 ];
+
+function generateOrderId() {
+  return "DRL-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+}
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -71,8 +76,47 @@ export default function CheckoutPage() {
     e.preventDefault();
     if (!validate()) return;
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 1500));
+
+    const order: Order = {
+      id: generateOrderId(),
+      createdAt: new Date().toISOString(),
+      customer: {
+        name: form.name,
+        phone: form.phone,
+        email: form.email,
+      },
+      delivery: {
+        address: form.address,
+        city: form.city,
+        landmark: form.landmark,
+        notes: form.notes,
+      },
+      items: state.items.map((i) => ({
+        name: i.product.name,
+        quantity: i.quantity,
+        price: i.product.price,
+        total: i.product.price * i.quantity,
+      })),
+      subtotal,
+      deliveryFee,
+      discount: 0,
+      total,
+      paymentMethod: payment,
+      status: "new",
+    };
+
+    saveOrder(order);
+
+    await new Promise((r) => setTimeout(r, 1200));
     clearCart();
+
+    // Pass order id to tracking page via sessionStorage
+    try {
+      sessionStorage.setItem("darlas-last-order", JSON.stringify(order));
+    } catch {
+      // ignore
+    }
+
     router.push("/tracking");
   };
 
@@ -147,9 +191,7 @@ export default function CheckoutPage() {
               className="bg-white dark:bg-brand-plum/30 rounded-3xl p-6 shadow-sm border border-brand-pink/10"
             >
               <h2 className="font-bold text-xl text-brand-plum dark:text-white mb-6 flex items-center gap-2">
-                <span className="w-8 h-8 rounded-full bg-brand-pink text-white text-sm flex items-center justify-center font-bold">
-                  1
-                </span>
+                <span className="w-8 h-8 rounded-full bg-brand-pink text-white text-sm flex items-center justify-center font-bold">1</span>
                 Contact Information
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -169,9 +211,7 @@ export default function CheckoutPage() {
               className="bg-white dark:bg-brand-plum/30 rounded-3xl p-6 shadow-sm border border-brand-pink/10"
             >
               <h2 className="font-bold text-xl text-brand-plum dark:text-white mb-6 flex items-center gap-2">
-                <span className="w-8 h-8 rounded-full bg-brand-pink text-white text-sm flex items-center justify-center font-bold">
-                  2
-                </span>
+                <span className="w-8 h-8 rounded-full bg-brand-pink text-white text-sm flex items-center justify-center font-bold">2</span>
                 Delivery Address
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -203,9 +243,7 @@ export default function CheckoutPage() {
               className="bg-white dark:bg-brand-plum/30 rounded-3xl p-6 shadow-sm border border-brand-pink/10"
             >
               <h2 className="font-bold text-xl text-brand-plum dark:text-white mb-6 flex items-center gap-2">
-                <span className="w-8 h-8 rounded-full bg-brand-pink text-white text-sm flex items-center justify-center font-bold">
-                  3
-                </span>
+                <span className="w-8 h-8 rounded-full bg-brand-pink text-white text-sm flex items-center justify-center font-bold">3</span>
                 Payment Method
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -222,22 +260,14 @@ export default function CheckoutPage() {
                           : "border-brand-pink/15 hover:border-brand-pink/40"
                       }`}
                     >
-                      <div
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                          payment === opt.id
-                            ? "bg-brand-pink text-white"
-                            : "bg-brand-cream dark:bg-white/10 text-brand-plum dark:text-white"
-                        }`}
-                      >
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${payment === opt.id ? "bg-brand-pink text-white" : "bg-brand-cream dark:bg-white/10 text-brand-plum dark:text-white"}`}>
                         <Icon size={20} />
                       </div>
                       <div>
                         <p className={`font-semibold text-sm ${payment === opt.id ? "text-brand-pink" : "text-brand-plum dark:text-white"}`}>
                           {opt.label}
                         </p>
-                        <p className="text-brand-charcoal/50 dark:text-white/50 text-xs">
-                          {opt.desc}
-                        </p>
+                        <p className="text-brand-charcoal/50 dark:text-white/50 text-xs">{opt.desc}</p>
                       </div>
                     </button>
                   );
@@ -254,9 +284,7 @@ export default function CheckoutPage() {
             className="lg:col-span-1"
           >
             <div className="bg-white dark:bg-brand-plum/30 rounded-3xl p-6 shadow-md border border-brand-pink/10 sticky top-24">
-              <h2 className="font-bold text-xl text-brand-plum dark:text-white mb-5">
-                Order Summary
-              </h2>
+              <h2 className="font-bold text-xl text-brand-plum dark:text-white mb-5">Order Summary</h2>
 
               <div className="space-y-3 mb-5 max-h-48 overflow-y-auto scrollbar-hide">
                 {state.items.map((item) => (
