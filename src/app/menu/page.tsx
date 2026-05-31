@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
-import { categories } from "@/data/products";
+import { products, categories } from "@/data/products";
 import { getLiveMenu } from "@/lib/menu";
 import type { Product } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
@@ -11,10 +11,12 @@ import ProductCard from "@/components/ProductCard";
 export default function MenuPage() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [menuItems, setMenuItems] = useState<Product[]>([]);
+  // Start with default products so the page is never empty on first render
+  const [menuItems, setMenuItems] = useState<Product[]>(products);
 
   useEffect(() => {
-    setMenuItems(getLiveMenu());
+    const live = getLiveMenu();
+    setMenuItems(live);
   }, []);
 
   const filtered = useMemo(() => {

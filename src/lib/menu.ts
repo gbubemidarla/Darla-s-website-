@@ -6,7 +6,10 @@ export function getLiveMenu(): Product[] {
   if (typeof window === "undefined") return products;
   try {
     const raw = localStorage.getItem(MENU_KEY);
-    return raw ? (JSON.parse(raw) as Product[]) : products;
+    if (!raw) return products;
+    const parsed = JSON.parse(raw) as Product[];
+    // Guard: if saved array is empty or invalid, fall back to defaults
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : products;
   } catch {
     return products;
   }
