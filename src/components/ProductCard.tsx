@@ -24,13 +24,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      whileHover={{ y: -4 }}
-      className="bg-white dark:bg-brand-plum/40 rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-brand-pink/10"
-    >
+    <div className="bg-white dark:bg-brand-plum/40 rounded-3xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-brand-pink/10">
       {/* Image */}
       <Link href={`/product/${product.id}`} className="block relative overflow-hidden">
         <div className="relative h-52 w-full">
@@ -130,6 +124,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           </motion.button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
