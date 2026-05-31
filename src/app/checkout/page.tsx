@@ -20,8 +20,6 @@ import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/data/products";
 import { saveOrder, type Order } from "@/lib/orders";
 
-const DELIVERY_FEE = 800;
-
 type PaymentMethod = "card" | "transfer" | "ussd" | "pod";
 
 const paymentOptions: {
@@ -57,8 +55,8 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Partial<typeof form>>({});
 
-  const deliveryFee = state.items.length > 0 ? (subtotal >= 5000 ? 0 : DELIVERY_FEE) : 0;
-  const total = subtotal + deliveryFee;
+  const deliveryFee = 0;
+  const total = subtotal;
 
   const validate = () => {
     const e: Partial<typeof form> = {};
@@ -305,13 +303,11 @@ export default function CheckoutPage() {
                   <span className="font-semibold">{formatPrice(subtotal)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-brand-charcoal/70 dark:text-white/70">Delivery</span>
-                  <span className={deliveryFee === 0 ? "text-green-500 font-semibold" : "font-semibold"}>
-                    {deliveryFee === 0 ? "Free" : formatPrice(deliveryFee)}
-                  </span>
+                  <span className="text-brand-charcoal/70 dark:text-white/70">Delivery Fee</span>
+                  <span className="text-brand-peach font-medium text-sm">Assigned by Darla&apos;s</span>
                 </div>
                 <div className="flex justify-between border-t border-brand-pink/10 pt-3">
-                  <span className="font-bold text-brand-plum dark:text-white text-base">Total</span>
+                  <span className="font-bold text-brand-plum dark:text-white text-base">Subtotal</span>
                   <span className="font-bold text-brand-pink text-xl">{formatPrice(total)}</span>
                 </div>
               </div>

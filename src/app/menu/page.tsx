@@ -1,17 +1,27 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
-import { products, categories, getProductsByCategory } from "@/data/products";
+import { categories } from "@/data/products";
+import { getLiveMenu } from "@/lib/menu";
+import type { Product } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 
 export default function MenuPage() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [menuItems, setMenuItems] = useState<Product[]>([]);
+
+  useEffect(() => {
+    setMenuItems(getLiveMenu());
+  }, []);
 
   const filtered = useMemo(() => {
-    const byCat = getProductsByCategory(activeCategory);
+    const byCat =
+      activeCategory === "All"
+        ? menuItems
+        : menuItems.filter((p) => p.category === activeCategory);
     if (!searchQuery.trim()) return byCat;
     const q = searchQuery.toLowerCase();
     return byCat.filter(
@@ -20,11 +30,10 @@ export default function MenuPage() {
         p.description.toLowerCase().includes(q) ||
         p.category.toLowerCase().includes(q)
     );
-  }, [activeCategory, searchQuery]);
+  }, [activeCategory, searchQuery, menuItems]);
 
   return (
     <>
-      {/* Header */}
       <section className="bg-hero-gradient dark:bg-dark-gradient py-16 text-white text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -32,12 +41,8 @@ export default function MenuPage() {
           transition={{ duration: 0.6 }}
           className="max-w-2xl mx-auto px-4"
         >
-          <p className="text-white/80 uppercase tracking-widest text-sm font-semibold mb-3">
-            Fresh Daily
-          </p>
-          <h1 className="font-display font-bold text-4xl md:text-5xl mb-4">
-            Our Menu
-          </h1>
+          <p className="text-white/80 uppercase tracking-widest text-sm font-semibold mb-3">Fresh Daily</p>
+          <h1 className="font-display font-bold text-4xl md:text-5xl mb-4">Our Menu</h1>
           <p className="text-white/80 text-lg">
             Browse our full selection of premium Nigerian cuisine. Fresh, authentic, and made to order.
           </p>
@@ -45,18 +50,13 @@ export default function MenuPage() {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Search + Filter bar */}
         <div className="sticky top-16 md:top-20 z-30 bg-brand-cream/95 dark:bg-gray-950/95 backdrop-blur-md pb-4 -mx-4 px-4">
-          {/* Search */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="relative max-w-xl mx-auto mb-5 mt-4"
           >
-            <Search
-              size={18}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-charcoal/40 dark:text-white/40"
-            />
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-charcoal/40 dark:text-white/40" />
             <input
               type="text"
               placeholder="Search for food, cuisine..."
@@ -66,7 +66,6 @@ export default function MenuPage() {
             />
           </motion.div>
 
-          {/* Category Tabs */}
           <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
             {categories.map((cat) => (
               <button
@@ -84,7 +83,6 @@ export default function MenuPage() {
           </div>
         </div>
 
-        {/* Results count */}
         <div className="flex items-center justify-between mb-8 mt-2">
           <p className="text-brand-charcoal/60 dark:text-white/60 text-sm">
             {filtered.length} item{filtered.length !== 1 ? "s" : ""} found
@@ -93,12 +91,8 @@ export default function MenuPage() {
           </p>
         </div>
 
-        {/* Products Grid */}
         {filtered.length > 0 ? (
-          <motion.div
-            layout
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-          >
+          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filtered.map((product, i) => (
               <motion.div
                 key={product.id}
@@ -113,23 +107,12 @@ export default function MenuPage() {
             ))}
           </motion.div>
         ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-24"
-          >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-24">
             <p className="text-6xl mb-4">🍽️</p>
-            <p className="text-brand-plum dark:text-white font-bold text-xl mb-2">
-              No items found
-            </p>
-            <p className="text-brand-charcoal/60 dark:text-white/60">
-              Try a different search term or category.
-            </p>
+            <p className="text-brand-plum dark:text-white font-bold text-xl mb-2">No items found</p>
+            <p className="text-brand-charcoal/60 dark:text-white/60">Try a different search term or category.</p>
             <button
-              onClick={() => {
-                setSearchQuery("");
-                setActiveCategory("All");
-              }}
+              onClick={() => { setSearchQuery(""); setActiveCategory("All"); }}
               className="btn-primary mt-6"
             >
               Show All Items

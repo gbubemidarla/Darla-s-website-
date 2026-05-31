@@ -8,7 +8,6 @@ import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/data/products";
 import { useState } from "react";
 
-const DELIVERY_FEE = 800;
 const PROMO_CODE = "DARLA20";
 const PROMO_DISCOUNT = 0.2;
 
@@ -29,8 +28,7 @@ export default function CartPage() {
   };
 
   const discount = promoApplied ? subtotal * PROMO_DISCOUNT : 0;
-  const deliveryFee = subtotal > 0 ? DELIVERY_FEE : 0;
-  const total = subtotal - discount + deliveryFee;
+  const total = subtotal - discount;
 
   if (state.items.length === 0) {
     return (
@@ -205,27 +203,17 @@ export default function CartPage() {
               )}
               <div className="flex justify-between">
                 <span className="text-brand-charcoal/70 dark:text-white/70">Delivery Fee</span>
-                <span className="font-semibold text-brand-charcoal dark:text-white">
-                  {subtotal >= 5000 ? (
-                    <span className="text-green-500">Free!</span>
-                  ) : (
-                    formatPrice(deliveryFee)
-                  )}
-                </span>
+                <span className="text-brand-peach font-medium text-sm">Assigned by Darla&apos;s</span>
               </div>
               <div className="border-t border-brand-pink/10 pt-3 flex justify-between">
-                <span className="font-bold text-brand-plum dark:text-white text-base">Total</span>
-                <span className="font-bold text-brand-pink text-xl">
-                  {formatPrice(subtotal >= 5000 ? total - deliveryFee : total)}
-                </span>
+                <span className="font-bold text-brand-plum dark:text-white text-base">Subtotal</span>
+                <span className="font-bold text-brand-pink text-xl">{formatPrice(total)}</span>
               </div>
             </div>
 
-            {subtotal < 5000 && (
-              <p className="text-xs text-brand-charcoal/50 dark:text-white/50 mt-3 text-center">
-                Add {formatPrice(5000 - subtotal)} more for free delivery!
-              </p>
-            )}
+            <p className="text-xs text-brand-charcoal/40 dark:text-white/40 mt-3 text-center">
+              Delivery fee will be confirmed by Darla&apos;s Foods after you place your order.
+            </p>
 
             <Link
               href="/checkout"

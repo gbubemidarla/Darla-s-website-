@@ -60,6 +60,24 @@ export function updateOrderStatus(id: string, status: Order["status"]): void {
   }
 }
 
+export function updateOrderDeliveryFee(id: string, fee: number): void {
+  try {
+    const orders = getOrders();
+    const idx = orders.findIndex((o) => o.id === id);
+    if (idx >= 0) {
+      orders[idx].deliveryFee = fee;
+      orders[idx].total = orders[idx].subtotal - orders[idx].discount + fee;
+      localStorage.setItem("darlas-orders", JSON.stringify(orders));
+    }
+  } catch {
+    // ignore
+  }
+}
+
+export function getOrderById(id: string): Order | undefined {
+  return getOrders().find((o) => o.id === id);
+}
+
 export function buildWhatsAppMessage(order: Order): string {
   const paymentLabels: Record<string, string> = {
     card: "Debit/Credit Card",
