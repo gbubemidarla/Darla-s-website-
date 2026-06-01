@@ -104,7 +104,7 @@ export default function CartPage() {
                     </p>
                   )}
                   <p className="text-brand-pink font-bold mt-2">
-                    {formatPrice(item.product.price)}
+                    {formatPrice(item.effectivePrice ?? item.product.price)}
                   </p>
                 </div>
 
@@ -137,7 +137,7 @@ export default function CartPage() {
                   </div>
 
                   <p className="font-bold text-brand-plum dark:text-white text-sm">
-                    {formatPrice(item.product.price * item.quantity)}
+                    {formatPrice((item.effectivePrice ?? item.product.price) * item.quantity)}
                   </p>
                 </div>
               </motion.div>

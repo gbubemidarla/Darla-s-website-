@@ -13,7 +13,7 @@ export interface Product {
   reviews: number;
   isPopular?: boolean;
   isBestSeller?: boolean;
-  modifiers?: { label: string; options: string[] }[];
+  modifiers?: { label: string; options: string[]; prices?: number[] }[];
 }
 
 export const categories = [
@@ -84,8 +84,7 @@ export const products: Product[] = [
     isPopular: true,
     isBestSeller: true,
     modifiers: [
-      { label: "Protein", options: ["No Protein", "Grilled Chicken", "Fried Beef", "Prawns"] },
-      { label: "Portion", options: ["Small", "Medium", "Large", "Party Pack"] },
+      { label: "Portion", options: ["Small", "Medium", "Large", "Party Pack"], prices: [1800, 2500, 3500, 7000] },
     ],
   },
   {
@@ -115,8 +114,7 @@ export const products: Product[] = [
     isPopular: true,
     isBestSeller: true,
     modifiers: [
-      { label: "Protein", options: ["No Protein", "Chicken", "Turkey", "Fish"] },
-      { label: "Portion", options: ["Small", "Medium", "Large", "Party Pack"] },
+      { label: "Portion", options: ["Small", "Medium", "Large", "Party Pack"], prices: [1600, 2200, 3200, 6500] },
     ],
   },
   {
@@ -163,7 +161,7 @@ export const products: Product[] = [
     reviews: 583,
     isBestSeller: true,
     modifiers: [
-      { label: "Portion", options: ["Small (5 pieces)", "Medium (8 pieces)", "Large (12 pieces)"] },
+      { label: "Portion", options: ["Small (5 pieces)", "Medium (8 pieces)", "Large (12 pieces)"], prices: [700, 900, 1400] },
     ],
   },
   {

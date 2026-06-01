@@ -28,19 +28,23 @@ export default function ProductDetailPage({ params }: PageProps) {
   const { addItem } = useCart();
   const [qty, setQty] = useState(1);
   const [selectedModifiers, setSelectedModifiers] = useState<Record<string, string>>({});
+  const [effectivePrice, setEffectivePrice] = useState<number | undefined>(undefined);
   const [added, setAdded] = useState(false);
 
   if (loaded && !product) return notFound();
   if (!product) return null;
 
+  const displayPrice = effectivePrice ?? product.price;
+
   const handleAdd = () => {
-    addItem(product, qty, selectedModifiers);
+    addItem(product, qty, selectedModifiers, effectivePrice);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
 
-  const handleModifier = (label: string, option: string) => {
+  const handleModifier = (label: string, option: string, price?: number) => {
     setSelectedModifiers((prev) => ({ ...prev, [label]: option }));
+    if (price !== undefined) setEffectivePrice(price);
   };
 
   return (
@@ -82,7 +86,7 @@ export default function ProductDetailPage({ params }: PageProps) {
           </div>
 
           <div className="flex items-baseline gap-3 mb-6">
-            <span className="font-bold text-4xl text-brand-plum dark:text-white">{formatPrice(product.price)}</span>
+            <span className="font-bold text-4xl text-brand-plum dark:text-white">{formatPrice(displayPrice)}</span>
             {product.originalPrice && (
               <span className="text-brand-charcoal/40 dark:text-white/40 text-xl line-through">{formatPrice(product.originalPrice)}</span>
             )}
@@ -105,19 +109,22 @@ export default function ProductDetailPage({ params }: PageProps) {
                 <div key={mod.label}>
                   <h3 className="font-bold text-brand-plum dark:text-white mb-3">{mod.label}</h3>
                   <div className="flex flex-wrap gap-2">
-                    {mod.options.map((opt) => (
-                      <button
-                        key={opt}
-                        onClick={() => handleModifier(mod.label, opt)}
-                        className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 border-2 ${
-                          selectedModifiers[mod.label] === opt
-                            ? "bg-brand-pink text-white border-brand-pink"
-                            : "bg-white dark:bg-brand-plum/40 text-brand-charcoal dark:text-white border-brand-pink/20 hover:border-brand-pink"
-                        }`}
-                      >
-                        {opt}
-                      </button>
-                    ))}
+                    {mod.options.map((opt, idx) => {
+                      const optPrice = mod.prices?.[idx];
+                      return (
+                        <button
+                          key={opt}
+                          onClick={() => handleModifier(mod.label, opt, optPrice)}
+                          className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 border-2 ${
+                            selectedModifiers[mod.label] === opt
+                              ? "bg-brand-pink text-white border-brand-pink"
+                              : "bg-white dark:bg-brand-plum/40 text-brand-charcoal dark:text-white border-brand-pink/20 hover:border-brand-pink"
+                          }`}
+                        >
+                          {opt}{optPrice !== undefined ? ` — ${formatPrice(optPrice)}` : ""}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               ))}
@@ -142,7 +149,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                 added ? "bg-green-500 text-white" : "bg-brand-pink text-white hover:bg-brand-plum shadow-lg shadow-brand-pink/30"
               }`}
             >
-              {added ? <><CheckCircle size={20} /> Added to Cart!</> : <><ShoppingCart size={20} /> Add to Cart — {formatPrice(product.price * qty)}</>}
+              {added ? <><CheckCircle size={20} /> Added to Cart!</> : <><ShoppingCart size={20} /> Add to Cart — {formatPrice(displayPrice * qty)}</>}
             </motion.button>
           </div>
 

@@ -13,6 +13,7 @@ export interface CartItem {
   product: Product;
   quantity: number;
   selectedModifiers: Record<string, string>;
+  effectivePrice?: number;
 }
 
 interface CartState {
@@ -74,7 +75,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
 
 interface CartContextValue {
   state: CartState;
-  addItem: (product: Product, quantity?: number, modifiers?: Record<string, string>) => void;
+  addItem: (product: Product, quantity?: number, modifiers?: Record<string, string>, effectivePrice?: number) => void;
   removeItem: (productId: string) => void;
   updateQty: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -116,9 +117,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const addItem = (
     product: Product,
     quantity = 1,
-    modifiers: Record<string, string> = {}
+    modifiers: Record<string, string> = {},
+    effectivePrice?: number
   ) => {
-    dispatch({ type: "ADD_ITEM", item: { product, quantity, selectedModifiers: modifiers } });
+    dispatch({ type: "ADD_ITEM", item: { product, quantity, selectedModifiers: modifiers, effectivePrice } });
   };
 
   const removeItem = (productId: string) =>
@@ -132,7 +134,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const totalItems = state.items.reduce((sum, i) => sum + i.quantity, 0);
   const subtotal = state.items.reduce(
-    (sum, i) => sum + i.product.price * i.quantity,
+    (sum, i) => sum + (i.effectivePrice ?? i.product.price) * i.quantity,
     0
   );
 
