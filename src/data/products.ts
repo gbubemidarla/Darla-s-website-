@@ -21,11 +21,7 @@ export const categories = [
   "Meatpie & Pastries",
   "Rice",
   "Chicken",
-  "Burgers",
-  "Shawarma",
-  "Pizza",
   "Drinks",
-  "Desserts",
 ];
 
 export const products: Product[] = [
@@ -172,6 +168,7 @@ export const products: Product[] = [
   },
   {
     id: "chicken-grilled",
+
     name: "Charcoal Grilled Chicken",
     category: "Chicken",
     price: 3500,
@@ -199,88 +196,6 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "beef-burger",
-    name: "Darla's Smash Burger",
-    category: "Burgers",
-    price: 2800,
-    description: "Double smash beef patty with caramelized onions and signature sauce",
-    longDescription:
-      "The Darla's Smash Burger features two thin, crispy-edged beef patties smashed to perfection on a hot griddle, layered with caramelized onions, melted cheddar cheese, fresh lettuce, ripe tomatoes, and our signature pink sauce.",
-    ingredients: [
-      "Beef Patty (Double)",
-      "Brioche Bun",
-      "Cheddar Cheese",
-      "Caramelized Onions",
-      "Lettuce",
-      "Tomatoes",
-      "Signature Pink Sauce",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80",
-    badge: "New",
-    rating: 4.6,
-    reviews: 215,
-    isPopular: true,
-    modifiers: [
-      { label: "Extras", options: ["No Extras", "Extra Patty", "Extra Cheese", "Bacon"] },
-      { label: "Side", options: ["No Side", "Fries", "Onion Rings", "Coleslaw"] },
-    ],
-  },
-  {
-    id: "chicken-shawarma",
-    name: "Premium Chicken Shawarma",
-    category: "Shawarma",
-    price: 2200,
-    description: "Marinated chicken strips wrapped in flatbread with garlic sauce",
-    longDescription:
-      "Our Premium Chicken Shawarma features thinly sliced, marinated chicken breast stacked and seasoned with Middle Eastern spices, wrapped in soft flatbread with crisp vegetables, pickles, and generous drizzles of garlic sauce and chili.",
-    ingredients: [
-      "Chicken Breast",
-      "Flatbread",
-      "Garlic Sauce",
-      "Lettuce",
-      "Tomatoes",
-      "Pickled Cucumbers",
-      "Shawarma Spice Blend",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1561651823-34feb02250e4?w=800&q=80",
-    badge: "Popular",
-    rating: 4.5,
-    reviews: 467,
-    isPopular: true,
-    modifiers: [
-      { label: "Sauce", options: ["Garlic Sauce", "Chili Sauce", "Both Sauces"] },
-      { label: "Size", options: ["Regular", "Large"] },
-    ],
-  },
-  {
-    id: "pizza-pepperoni",
-    name: "Spicy Pepperoni Pizza",
-    category: "Pizza",
-    price: 4500,
-    description: "Classic pepperoni pizza on a crispy thin crust with extra cheese",
-    longDescription:
-      "Our Spicy Pepperoni Pizza is made with a hand-stretched thin crust, layered with rich tomato sauce, generous amounts of mozzarella cheese, spicy pepperoni slices, and finished with Italian herbs.",
-    ingredients: [
-      "Pizza Dough",
-      "Tomato Sauce",
-      "Mozzarella",
-      "Pepperoni",
-      "Italian Herbs",
-      "Chili Flakes",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80",
-    badge: "Trending",
-    rating: 4.7,
-    reviews: 389,
-    modifiers: [
-      { label: "Size", options: ["9 inch", "12 inch", "15 inch"] },
-      { label: "Crust", options: ["Thin Crust", "Thick Crust", "Stuffed Crust"] },
-    ],
-  },
-  {
     id: "chapman-drink",
     name: "Chilled Chapman",
     category: "Drinks",
@@ -302,32 +217,6 @@ export const products: Product[] = [
     reviews: 634,
     modifiers: [
       { label: "Size", options: ["Regular (50cl)", "Large (1L)"] },
-    ],
-  },
-  {
-    id: "chocolate-cake",
-    name: "Velvet Chocolate Cake",
-    category: "Desserts",
-    price: 2000,
-    description: "Rich, moist chocolate layer cake with silky ganache frosting",
-    longDescription:
-      "Our Velvet Chocolate Cake is a showstopper dessert featuring layers of moist dark chocolate sponge, filled and frosted with a rich silky ganache, and decorated with chocolate shards.",
-    ingredients: [
-      "Dark Chocolate",
-      "Butter",
-      "Eggs",
-      "Sugar",
-      "Flour",
-      "Heavy Cream",
-      "Vanilla",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&q=80",
-    badge: "Dessert",
-    rating: 4.9,
-    reviews: 278,
-    modifiers: [
-      { label: "Slice", options: ["Single Slice", "Double Slice", "Whole Cake"] },
     ],
   },
   {
