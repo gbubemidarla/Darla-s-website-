@@ -39,7 +39,6 @@ export default function TrackingPage() {
       const raw = sessionStorage.getItem("darlas-last-order");
       if (!raw) return;
       const base = JSON.parse(raw) as Order;
-      // Always read fresh status from localStorage
       const live = getOrderById(base.id);
       const resolved = live ?? base;
       setOrder(resolved);
@@ -51,11 +50,32 @@ export default function TrackingPage() {
 
   useEffect(() => {
     loadOrder();
+
+    // Auto-open WhatsApp when coming straight from checkout
+    try {
+      const shouldSend = sessionStorage.getItem("darlas-auto-wa");
+      if (shouldSend === "true") {
+        sessionStorage.removeItem("darlas-auto-wa");
+        const raw = sessionStorage.getItem("darlas-last-order");
+        if (raw) {
+          const orderData = JSON.parse(raw) as Order;
+          const msg = buildWhatsAppMessage(orderData);
+          // Short delay so the tracking page renders first
+          setTimeout(() => {
+            window.location.href = `https://wa.me/${WHATSAPP_NUMBERS[0]}?text=${msg}`;
+          }, 600);
+        }
+      }
+    } catch {
+      // ignore
+    }
+
     // Poll every 15 seconds for admin status updates
     intervalRef.current = setInterval(loadOrder, 15000);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleWhatsApp = (number: string) => {
@@ -106,29 +126,25 @@ export default function TrackingPage() {
             </div>
             <div className="flex-1">
               <h3 className="font-bold text-green-800 dark:text-green-300 mb-1">
-                {waSent ? "✅ Order Sent to WhatsApp!" : "Send Your Order via WhatsApp"}
+                ✅ Order Sent to WhatsApp!
               </h3>
               <p className="text-green-700 dark:text-green-400 text-sm mb-4">
-                {waSent
-                  ? "We'll confirm your order and delivery fee shortly via WhatsApp."
-                  : "Tap a button to send your order details to Darla's Foods on WhatsApp for quick confirmation."}
+                Your order has been sent to Darla&apos;s Foods on WhatsApp. We&apos;ll confirm your order and delivery fee shortly.
               </p>
-              {!waSent && (
-                <div className="flex flex-wrap gap-3">
-                  <button
-                    onClick={() => handleWhatsApp(WHATSAPP_NUMBERS[0])}
-                    className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm"
-                  >
-                    <MessageCircle size={16} /> WhatsApp Line 1
-                  </button>
-                  <button
-                    onClick={() => handleWhatsApp(WHATSAPP_NUMBERS[1])}
-                    className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm"
-                  >
-                    <MessageCircle size={16} /> WhatsApp Line 2
-                  </button>
-                </div>
-              )}
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => handleWhatsApp(WHATSAPP_NUMBERS[0])}
+                  className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-xl transition-colors text-sm"
+                >
+                  <MessageCircle size={15} /> Resend to Line 1
+                </button>
+                <button
+                  onClick={() => handleWhatsApp(WHATSAPP_NUMBERS[1])}
+                  className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-xl transition-colors text-sm"
+                >
+                  <MessageCircle size={15} /> Also Send to Line 2
+                </button>
+              </div>
             </div>
           </div>
         </motion.div>

@@ -108,9 +108,10 @@ export default function CheckoutPage() {
     await new Promise((r) => setTimeout(r, 1200));
     clearCart();
 
-    // Pass order id to tracking page via sessionStorage
     try {
       sessionStorage.setItem("darlas-last-order", JSON.stringify(order));
+      // Flag so tracking page auto-opens WhatsApp immediately
+      sessionStorage.setItem("darlas-auto-wa", "true");
     } catch {
       // ignore
     }
