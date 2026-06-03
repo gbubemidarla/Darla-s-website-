@@ -64,7 +64,8 @@ export default function ProductDetailPage({ params }: PageProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
           <div className="relative aspect-square rounded-3xl overflow-hidden shadow-2xl">
-            <Image src={product.image} alt={product.name} fill unoptimized={product.image.startsWith("/")} className="object-cover" priority sizes="(max-width: 1024px) 100vw, 50vw" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
             {product.badge && (
               <span className="absolute top-5 left-5 bg-brand-pink text-white font-bold px-4 py-2 rounded-full text-sm">{product.badge}</span>
             )}

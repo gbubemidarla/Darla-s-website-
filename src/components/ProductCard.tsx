@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -26,27 +25,23 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="bg-white dark:bg-brand-plum/40 rounded-3xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-brand-pink/10">
       {/* Image */}
-      <Link href={`/product/${product.id}`} className="block relative overflow-hidden">
-        <div className="relative h-52 w-full">
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            unoptimized={product.image.startsWith("/")}
-            className="object-cover hover:scale-105 transition-transform duration-500"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-          {product.badge && (
-            <span className="absolute top-3 left-3 bg-brand-pink text-white text-xs font-bold px-3 py-1 rounded-full">
-              {product.badge}
-            </span>
-          )}
-          {product.originalPrice && (
-            <span className="absolute top-3 right-3 bg-brand-gold text-brand-charcoal text-xs font-bold px-2 py-1 rounded-full">
-              SALE
-            </span>
-          )}
-        </div>
+      <Link href={`/product/${product.id}`} className="block relative h-52 overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+        />
+        {product.badge && (
+          <span className="absolute top-3 left-3 bg-brand-pink text-white text-xs font-bold px-3 py-1 rounded-full">
+            {product.badge}
+          </span>
+        )}
+        {product.originalPrice && (
+          <span className="absolute top-3 right-3 bg-brand-gold text-brand-charcoal text-xs font-bold px-2 py-1 rounded-full">
+            SALE
+          </span>
+        )}
       </Link>
 
       {/* Content */}
