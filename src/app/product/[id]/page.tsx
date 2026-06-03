@@ -94,43 +94,6 @@ export default function ProductDetailPage({ params }: PageProps) {
 
           <p className="text-brand-charcoal/70 dark:text-white/70 leading-relaxed mb-8 text-base">{product.longDescription}</p>
 
-          <div className="mb-8">
-            <h3 className="font-bold text-brand-plum dark:text-white mb-3">Ingredients</h3>
-            <div className="flex flex-wrap gap-2">
-              {product.ingredients.map((ing) => (
-                <span key={ing} className="bg-brand-pink/10 dark:bg-brand-pink/20 text-brand-pink text-xs font-medium px-3 py-1.5 rounded-full">{ing}</span>
-              ))}
-            </div>
-          </div>
-
-          {product.modifiers && product.modifiers.length > 0 && (
-            <div className="mb-8 space-y-5">
-              {product.modifiers.map((mod) => (
-                <div key={mod.label}>
-                  <h3 className="font-bold text-brand-plum dark:text-white mb-3">{mod.label}</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {mod.options.map((opt, idx) => {
-                      const optPrice = mod.prices?.[idx];
-                      return (
-                        <button
-                          key={opt}
-                          onClick={() => handleModifier(mod.label, opt, optPrice)}
-                          className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 border-2 ${
-                            selectedModifiers[mod.label] === opt
-                              ? "bg-brand-pink text-white border-brand-pink"
-                              : "bg-white dark:bg-brand-plum/40 text-brand-charcoal dark:text-white border-brand-pink/20 hover:border-brand-pink"
-                          }`}
-                        >
-                          {opt}{optPrice !== undefined ? ` — ${formatPrice(optPrice)}` : ""}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
           <div className="flex items-center gap-4 mt-auto">
             <div className="flex items-center gap-2 bg-brand-cream dark:bg-white/10 rounded-2xl px-4 py-3">
               <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-brand-pink hover:text-white transition-all text-brand-plum dark:text-white">

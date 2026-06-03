@@ -27,23 +27,23 @@ const DEFAULT_TESTIMONIALS = [
   {
     name: "Adaeze Okonkwo",
     rating: 5,
-    text: "Darla's meatpie is absolutely divine! The flaky crust and rich filling — I've never had anything like it in Lagos. Orders delivered fresh every single time.",
+    text: "Darla's meatpie is absolutely divine! The flaky crust and rich filling — I've never had anything like it in Benin. Orders delivered fresh every single time.",
   },
   {
     name: "Emeka Chukwu",
     rating: 5,
-    text: "The fried rice is incredible! Every grain perfectly seasoned. My family now orders from Darla's every weekend. Quality is consistently premium.",
+    text: "The sausage rolls are incredible! Perfectly seasoned filling in that flaky pastry. My family now orders from Darla's every weekend. Quality is consistently premium.",
   },
   {
     name: "Fatima Hassan",
     rating: 5,
-    text: "Fast delivery, warm food, authentic taste! Darla's is my go-to for special occasions and everyday cravings. The jollof rice has that perfect smoky party finish.",
+    text: "Fast delivery, warm food, authentic taste! Darla's is my go-to for special occasions and everyday cravings. The Chapman drink is so refreshing and pairs perfectly!",
   },
 ];
 
 const valueProps = [
   { icon: Leaf,       title: "Fresh Ingredients",  desc: "We source only the finest, freshest produce and premium cuts — no compromise on quality, ever." },
-  { icon: Truck,      title: "Fast Delivery",       desc: "Hot meals delivered to your door in under 45 minutes across Lagos." },
+  { icon: Truck,      title: "Fast Delivery",       desc: "Hot meals delivered to your door in under 45 minutes across Benin." },
   { icon: DollarSign, title: "Affordable Pricing",  desc: "Premium taste at fair prices. Great food shouldn't break the bank." },
   { icon: Award,      title: "Quality Service",     desc: "Every order is packed with care and backed by our 100% satisfaction guarantee." },
 ];
@@ -150,7 +150,7 @@ export default function HomePage() {
           <motion.div initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="text-white">
             <motion.span initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
               className="inline-block bg-white/20 backdrop-blur-sm text-white text-sm font-semibold px-4 py-2 rounded-full mb-6 border border-white/30">
-              🌟 Lagos&apos; Most Loved Food Brand
+              🌟 Benin&apos;s Most Loved Food Brand
             </motion.span>
             <h1 className="font-display font-bold text-5xl md:text-6xl lg:text-7xl leading-tight mb-6">
               Darla&apos;s <span className="text-brand-gold drop-shadow-lg">Foods</span>
@@ -158,7 +158,7 @@ export default function HomePage() {
             <p className="text-xl md:text-2xl text-white/90 mb-4 font-medium">Where Every Bite Tells a Story</p>
             <p className="text-white/75 text-base md:text-lg mb-10 max-w-md leading-relaxed">
               Indulge in our legendary golden-crust <strong className="text-white">Meatpie</strong> and vibrant{" "}
-              <strong className="text-white">Fried Rice</strong> — crafted fresh daily with premium ingredients and served with pure love.
+              <strong className="text-white">Sausage Rolls</strong> — crafted fresh daily with premium ingredients and served with pure love.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link href="/menu" className="btn-primary text-base px-8 py-4 bg-white text-brand-pink hover:bg-brand-gold hover:text-brand-plum">
@@ -185,7 +185,7 @@ export default function HomePage() {
               </motion.div>
               <motion.div animate={{ y: [0, 10, 0], x: [0, -5, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                 className="absolute -bottom-8 -left-12 w-36 h-36 md:w-44 md:h-44 rounded-3xl overflow-hidden border-3 border-white/40 shadow-xl">
-                <Image src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=400&q=80" alt="Darla's Fried Rice" fill className="object-cover" />
+                <Image src="https://images.unsplash.com/photo-1601312061560-c0e1bf93a7ea?w=400&q=80" alt="Darla's Sausage Rolls" fill className="object-cover" />
               </motion.div>
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.8, type: "spring" }}
                 className="absolute -top-4 -right-4 bg-white rounded-2xl p-3 shadow-xl">
@@ -290,7 +290,7 @@ export default function HomePage() {
             <p className="text-brand-pink font-semibold uppercase tracking-widest text-sm mb-4">Our Story</p>
             <h2 className="section-heading mb-6">Crafted with Passion, <span className="text-gradient">Served with Love</span></h2>
             <p className="text-brand-charcoal/70 dark:text-white/70 mb-5 leading-relaxed">
-              Darla&apos;s Foods was born from a simple belief: that great food is the foundation of great memories. Founded over a decade ago in the heart of Lagos, we started with a single recipe — a golden, flaky meatpie that made everyone who tasted it stop and smile.
+              Darla&apos;s Foods was born from a simple belief: that great food is the foundation of great memories. Founded over a decade ago in the heart of Benin, we started with a single recipe — a golden, flaky meatpie that made everyone who tasted it stop and smile.
             </p>
             <p className="text-brand-charcoal/70 dark:text-white/70 mb-5 leading-relaxed">
               Today, our kitchen is built on the same philosophy — fresh ingredients sourced daily, recipes perfected over years, and a team that pours genuine care into every single dish.
@@ -417,9 +417,9 @@ export default function HomePage() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { icon: Phone,  label: "Phone & WhatsApp", value: "+234 801 234 5678",                        href: "tel:+2348012345678" },
+            { icon: Phone,  label: "Phone & WhatsApp", value: "+234 7054170256",                         href: "tel:+2347054170256" },
             { icon: Mail,   label: "Email Us",         value: "hello@darlafoods.com",                    href: "mailto:hello@darlafoods.com" },
-            { icon: MapPin, label: "Find Us",          value: "12 Gourmet Lane, Victoria Island, Lagos", href: "#" },
+            { icon: MapPin, label: "Find Us",          value: "Benin City, Edo State",                   href: "#" },
             { icon: Clock,  label: "Business Hours",   value: "Mon–Sun: 8am – 10pm",                     href: "#" },
           ].map((item) => (
             <motion.a key={item.label} href={item.href}
