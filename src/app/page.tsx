@@ -181,11 +181,11 @@ export default function HomePage() {
             <div className="relative">
               <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 className="relative w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-white/30 shadow-2xl">
-                <Image src="https://images.unsplash.com/photo-1604579278540-f4cb4a0ae1e9?w=800&q=80" alt="Darla's Signature Meatpie" fill className="object-cover" priority />
+                <Image src="/meatpie.jpg" alt="Darla's Signature Meatpie" fill className="object-cover" priority />
               </motion.div>
               <motion.div animate={{ y: [0, 10, 0], x: [0, -5, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                 className="absolute -bottom-8 -left-12 w-36 h-36 md:w-44 md:h-44 rounded-3xl overflow-hidden border-3 border-white/40 shadow-xl">
-                <Image src="https://images.unsplash.com/photo-1601312061560-c0e1bf93a7ea?w=400&q=80" alt="Darla's Sausage Rolls" fill className="object-cover" />
+                <Image src="/sausage-rolls.jpg" alt="Darla's Sausage Rolls" fill className="object-cover" />
               </motion.div>
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.8, type: "spring" }}
                 className="absolute -top-4 -right-4 bg-white rounded-2xl p-3 shadow-xl">

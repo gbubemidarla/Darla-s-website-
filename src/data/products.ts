@@ -43,8 +43,7 @@ export const products: Product[] = [
       "Aromatic Spices",
       "Eggs",
     ],
-    image:
-      "https://images.unsplash.com/photo-1604579278540-f4cb4a0ae1e9?w=800&q=80",
+    image: "/meatpie.jpg",
     badge: "Signature",
     rating: 4.9,
     reviews: 1284,
@@ -95,8 +94,7 @@ export const products: Product[] = [
       "Mixed Herbs",
       "Egg Wash",
     ],
-    image:
-      "https://images.unsplash.com/photo-1601312061560-c0e1bf93a7ea?w=800&q=80",
+    image: "/sausage-rolls.jpg",
     rating: 4.6,
     reviews: 523,
     isPopular: true,
