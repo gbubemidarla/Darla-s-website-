@@ -59,8 +59,8 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-sm text-white/70">
                 <Phone size={16} className="mt-0.5 text-brand-pink shrink-0" />
-                <a href="tel:+2348012345678" className="hover:text-brand-pink transition-colors">
-                  +234 801 234 5678
+                <a href="tel:+2347054170256" className="hover:text-brand-pink transition-colors">
+                  +234 7054170256
                 </a>
               </li>
               <li className="flex items-start gap-3 text-sm text-white/70">
@@ -71,7 +71,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-3 text-sm text-white/70">
                 <MapPin size={16} className="mt-0.5 text-brand-pink shrink-0" />
-                <span>12 Gourmet Lane, Victoria Island, Lagos, Nigeria</span>
+                <span>Benin City, Edo State, Nigeria</span>
               </li>
             </ul>
           </div>
